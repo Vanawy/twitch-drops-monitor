@@ -8,6 +8,7 @@ class DropMonitor
     id = null;
     secret = null;
     token = null;
+    gameId = null;
 
     constructor(id, secret)
     {
@@ -17,10 +18,11 @@ class DropMonitor
 
     async findStreamsWithDropsEnabled(gameName)
     {
+        const gameId = await this._getGameId(gameName);
         const token = await this._getToken();
 
-        const endpoint = new URL('https://api.twitch.tv/helix/search/channels');
-        endpoint.searchParams.set('query', gameName);
+        const endpoint = new URL('https://api.twitch.tv/helix/search/streams');
+        endpoint.searchParams.set('query', gameId);
         endpoint.searchParams.set('first', 100);
         endpoint.searchParams.set('live_only', true);
 
@@ -36,7 +38,6 @@ class DropMonitor
     }
 
     _authByClientCreds = (id, secret) => {
-        console.debug("Authentication...");
         const url = new URL('https://id.twitch.tv/oauth2/token');
         url.searchParams.set('client_id', this.id);
         url.searchParams.set('client_secret', this.secret);
@@ -47,18 +48,15 @@ class DropMonitor
 
     _getToken()
     {
-        console.debug("Getting token...");
         if (this.token === null || this.token.isExpired())
         {
             return this._authByClientCreds(this.id, this.secret)
             .then(this._updateToken);
         }
-        console.debug("Return old token");
         return new Promise(_ => this.token);
     }
 
     _updateToken = response => {
-        console.debug("Authentication: success");
         this.token = new Token(response.data);
         return this.token;
     }
@@ -67,6 +65,37 @@ class DropMonitor
         const streams = response.data.data;
         return streams.filter(stream => {
             return stream.tag_ids.indexOf(DROPS_TAG_ID) !== -1;
+        });
+    }
+
+    async _getGameId(gameName)
+    {
+        if (this.gameId) {
+            return this.gameId;
+        }
+
+        const token = await this._getToken();
+
+        const endpoint = new URL('https://api.twitch.tv/helix/games');
+        endpoint.searchParams.set('name', gameName);
+
+        return axios({
+            method: 'get',
+            url: endpoint.toString(),
+            headers: {
+                'Authorization': `Bearer ${token.access_token}`,
+                'Client-ID': this.id,
+            }
+        })
+        .then(response => {
+            const games = response.data.data;
+            for(let game of games)
+            {
+                if (game.name == gameName) {
+                    return game.id;
+                }
+            }
+            throw new Error('Game not found');
         });
     }
 }
