@@ -1,6 +1,6 @@
 {
   "name": "drop-monitor",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Find streams with 'Drops Enabled' tag by name of the game",
   "repository": {
     "type": "git",

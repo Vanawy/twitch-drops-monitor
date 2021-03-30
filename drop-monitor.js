@@ -3,7 +3,7 @@ const axios = require("axios");
 // 'Drops Enabled' tag
 const DROPS_TAG_ID = 'c2542d6d-cd10-4532-919b-3d19f30a768b';
 
-class Client 
+class DropMonitor 
 {
     id = null;
     secret = null;
@@ -93,4 +93,4 @@ class Token {
     }
 }
 
-exports.Client = Client;
+exports.DropMonitor = DropMonitor;
