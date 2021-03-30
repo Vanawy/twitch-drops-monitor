@@ -1,8 +1,8 @@
 {
   "name": "drop-monitor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "drop-monitor.js",
   "scripts": {
     "dev": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,12 +10,15 @@
   "keywords": [
     "twitch",
     "analytics",
-    "gaming"
+    "gaming",
+    "twitch-drops"
   ],
   "author": "vanawy",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
     "dotenv": "^8.2.0"
   }
 }
