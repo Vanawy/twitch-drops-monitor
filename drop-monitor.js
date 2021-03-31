@@ -29,7 +29,6 @@ class DropMonitor
     }
 
     _filterStreamsWithDrops = streams => {
-        console.log(streams.data.length);
         return streams.data.filter(stream => {
             return stream.tagIds.indexOf(DROPS_TAG_ID) !== -1;
         });
