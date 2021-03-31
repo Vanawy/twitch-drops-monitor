@@ -20,7 +20,8 @@
   "author": "vanawy",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1"
+    "twitch": "^4.5.3",
+    "twitch-auth": "^4.5.3"
   },
   "devDependencies": {
     "dotenv": "^8.2.0"
